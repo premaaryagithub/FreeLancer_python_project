@@ -1,0 +1,107 @@
+<style>
+  /* Style the form container */
+form {
+  width: 300px;
+  margin: 0 auto;
+  padding: 20px;
+  background-color: #fff;
+  border-radius: 5px;
+  box-shadow: 0px 0px 10px rgba(0,0,0,0.1);
+}
+
+/* Style the form header */
+h1 {
+  text-align: center;
+  margin-bottom: 30px;
+  color: #333;
+}
+
+/* Style the form labels */
+label {
+  display: block;
+  margin-bottom: 5px;
+  font-weight: bold;
+  color: #333;
+}
+
+/* Style the form inputs */
+input[type="text"],
+input[type="email"],
+input[type="password"],
+input[type = "confirm_password"] {
+  width: 100%;
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  box-sizing: border-box;
+  font-size: 16px;
+  color: #333;
+}
+
+/* Style the form submit button */
+input[type="submit"] {
+  width: 100%;
+  padding: 10px;
+  margin-top:10px ;
+  background-color:blue;
+  color: #fff;
+  border: none;
+  border-radius: 5px;
+  font-size: 16px;
+  cursor: pointer;
+}
+
+/* Style the form submit button hover effect */
+input[type="submit"]:hover {
+  background-color: #45a049;
+}
+
+/* Style the form reset button */
+input[type="reset"] {
+  width: 100%;
+  padding: 10px;
+  margin-top:10px ;
+  background-color:#f00;
+  color: #fff;
+  border: none;
+  border-radius: 5px;
+  font-size: 16px;
+  cursor: pointer;
+}
+
+/* Style the form reset button hover effect */
+input[type="reset"]:hover {
+  background-color: #d03030;
+}
+
+/* Style the form hyperlink */
+p a {
+  display: block;
+  text-align: right;
+  color: #007bff;
+  font-size: 18px;
+  margin-top: 3px;
+  text-decoration: none;
+}
+
+/* Style the form hyperlink hover effect */
+p a:hover {
+  text-decoration: underline;
+}
+</style>
+<h1>Register</h1>
+<form action="{{ url_for('submit_registration') }}" method="POST">
+  <label for="username">Username:</label><br>
+  <input type="text" id="username" name="username" required><br>
+  <label for="email">Email:</label><br>
+  <input type="email" id="email" name="email" required><br>
+  <label for="password">Password:</label><br>
+  <p>
+    The password must be at least 8 characters long, contain at least one special character, one digit, and no spaces.
+  </p>
+  <input type="password" id="password" name="password" required><br>
+  <label for="confirm_password">Confirm Password:</label><br>
+  <input type="password" id="confirm_password" name="confirm_password" required><br>
+  <input type="submit" value="Register">
+  <p>Already Registered?<a href="{{ url_for('login') }}">login</a></p> 
+</form>

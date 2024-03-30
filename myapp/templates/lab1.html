@@ -1,0 +1,265 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <style>
+      *{
+    margin:0px;
+    padding:0px;
+    box-sizing: border-box;
+
+}
+
+.title{
+    border: 10px solid white  ;
+    max-width: 700px;
+    margin:auto;
+    height :50px;
+    display:flex;
+    align-items: center;
+    justify-content: center;
+
+}
+.circle{
+ width : 30px;
+ height: 30px;
+ display:flex;
+ border-radius:30px ;
+ justify-content:flex-end;
+ align-items:flex-end;
+ background-color: darkblue;
+ position: absolute;
+ text-align: right;
+}
+.circle p {
+  text-align: center;
+}
+.search-bar {
+    display: flex;
+    justify-content: center;
+    padding: 24px;
+    border-color: black;
+    border-radius: 0ch;
+
+  }
+  .search-bar input {
+    width: 50%;
+    min-width: 300px;
+    padding: 12px 24px;
+    border-radius: 24px;
+    font-size: 16px;
+    border: 10px;
+    border-color: black;
+    outline: auto;
+  }
+  
+  .search-bar button {
+    background-color: blue ;
+    color: white;
+    padding: 12px 24px;
+    border-radius: 24px;
+    font-size: 16px;
+    cursor: pointer;
+  }
+  
+  .results {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    padding: 24px;
+  }
+  #results {
+    margin-top: 20px;
+  }
+  
+  #results .book {
+    margin-bottom: 20px;
+  }
+  
+  #results .book img {
+    width: 100px;
+    height: 150px;
+    object-fit: cover;
+  }
+  
+  #results .book .title {
+    margin-top: 10px;
+    font-size: 18px;
+    font-weight: bold;
+  }
+  
+  #results .book .author {
+    margin-top: 5px;
+    font-size: 14px;
+    color: #666;
+  }
+  .userinfo {
+  position: absolute;
+  top: 60px;
+  right: 20px;
+  width: 300px;
+  height: 300px;
+  background-color:lightgrey;
+  border: 1px solid #ddd;
+  border-radius: 10px;
+  overflow-y: auto;
+  display: none;
+}
+.userinfo.circle{
+ width : 30px;
+ height: 30px;
+ display:flex;
+ border-radius:30px ;
+ justify-content:center;
+ align-items:center;
+ background-color: darkblue;
+ position: absolute;
+ text-align: right;
+}
+.userinfo.circle p {
+  text-align: center;
+}
+
+.userinfo h1 {
+  text-align: center;
+  margin-top: 10px;
+  padding:10px;
+}
+
+.userinfo h2 {
+  text-align: center;
+  margin-bottom: 10px;
+  padding:10px;
+
+}
+
+.userinfo p {
+  text-align: center;
+  margin-top: 20px;
+  padding:10px;
+}
+
+.userinfo a {
+  text-decoration: none;
+  color: #007bff;
+}
+
+.userinfo a:hover {
+  text-decoration: underline;
+}
+
+    </style>
+    <link rel="stylesheet" type="text/css" href="lab1.css" />
+    <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.4.2/css/fontawesome.min.css" />
+</head>
+  <body>
+    <div class="circle"> <p style="color: white; font-size: 30px; text-align:center; padding-left:1px; padding-right:5px;";>{{ first_letter}}</p>   
+    </div>
+    <div class ="title " >
+        <h2>WISE WEB</h2>
+        </div>
+    <div class="search-bar">
+        <i class="fa-solid fa-magnifying-glass"></i>
+      <input type="text" id="search" placeholder="Search..." />
+      <button id="search-button">Search</button>
+    </div>
+    <div id="results" class="results"></div>
+    <div class="userinfo" id="userinfo">
+      <div class="circle"> <p style="color: white; font-size: 26px; text-align:center;padding-left:2px;padding-top:2px;padding-bottom:2px;padding-right:3px;";>{{ first_letter}}</p>   
+      </div>
+      <h1> {{ name }}</h1>
+      <h2> {{ email_ }}</h2>
+      <p> Wanna Logout??<a href="{{ url_for('logout') }}"> LOGOUT</a></p>
+    
+    </div>
+    <script>
+      const searchButton = document.getElementById('search-button');
+const searchQuery = document.getElementById('search');
+const resultsContainer = document.getElementById('results');
+searchQuery.addEventListener('keyup', (event) => {
+  if (event.key === 'Enter') {
+    const searchTerm = event.target.value;
+  const query = searchQuery.value.trim();
+  if (!query) {
+    alert('Please enter a search query.');
+    return;
+  }
+
+  const url = `https://www.googleapis.com/books/v1/volumes?q=${query}&key=AIzaSyAY7mQOn538uaX1ql_rp8fQ7qPyA9-an9I`;
+
+  fetch(url)
+    .then((response) => response.json())
+    .then((data) => {
+      resultsContainer.innerHTML = '';
+      data.items.forEach((item) => {
+        const book = document.createElement('div');
+        book.classList.add('book');
+
+        const img = document.createElement('img');
+        img.src = item.volumeInfo.imageLinks.thumbnail;
+        book.appendChild(img);
+
+        const title = document.createElement('p');
+        title.classList.add('title');
+        title.textContent = item.volumeInfo.title;
+        book.appendChild(title);
+
+        const author = document.createElement('p');
+        author.classList.add('author');
+        author.textContent = item.volumeInfo.authors[0];
+        book.appendChild(author);
+
+        resultsContainer.appendChild(book);
+      });
+    })
+    .catch((error) => {
+      console.error('Error:', error);
+      alert('An error occurred while searching.');
+    });
+  }
+});
+searchButton.addEventListener('click', () => {
+  const query = searchQuery.value.trim();
+  if (!query) {
+    alert('Please enter a search query.');
+    return;
+  }
+
+  const url = `https://www.googleapis.com/books/v1/volumes?q=${query}&key=AIzaSyAY7mQOn538uaX1ql_rp8fQ7qPyA9-an9I`;
+
+  fetch(url)
+    .then((response) => response.json())
+    .then((data) => {
+      resultsContainer.innerHTML = '';
+      data.items.forEach((item) => {
+        const book = document.createElement('div');
+        book.classList.add('book');
+
+        const img = document.createElement('img');
+        img.src = item.volumeInfo.imageLinks.thumbnail;
+        book.appendChild(img);
+
+        const title = document.createElement('p');
+        title.classList.add('title');
+        title.textContent = item.volumeInfo.title;
+        book.appendChild(title);
+
+        const author = document.createElement('p');
+        author.classList.add('author');
+        author.textContent = item.volumeInfo.authors[0];
+        book.appendChild(author);
+
+        resultsContainer.appendChild(book);
+      });
+    })
+    .catch((error) => {
+      console.error('Error:', error);
+      alert('An error occurred while searching.');
+    });
+});
+document.querySelector(".circle").addEventListener("click", () => {
+  const userinfo = document.getElementById("userinfo");
+  userinfo.style.display = userinfo.style.display === "block" ? "none" : "block";
+});
+    </script>
+  </body>
+</html>
